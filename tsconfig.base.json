@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022", "dom", "dom.iterable"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "paths": {
+      "@furlivo/ui": ["packages/ui/src/index.ts"],
+      "@furlivo/types": ["packages/types/src/index.ts"],
+      "@furlivo/schemas": ["packages/schemas/src/index.ts"],
+      "@furlivo/database": ["packages/database/src/index.ts"],
+      "@furlivo/config": ["packages/config/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

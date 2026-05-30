@@ -1,0 +1,49 @@
+{
+  "name": "furlivo",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:storefront": "nx serve storefront",
+    "dev:admin": "nx serve admin",
+    "dev": "nx run-many --target=serve --projects=storefront,admin --parallel",
+    "build": "nx run-many --target=build --all",
+    "build:storefront": "nx build storefront",
+    "build:admin": "nx build admin",
+    "lint": "nx run-many --target=lint --all",
+    "test": "nx run-many --target=test --all",
+    "type-check": "nx run-many --target=type-check --all",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset",
+    "supabase:functions:serve": "supabase functions serve",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json,css}\""
+  },
+  "devDependencies": {
+    "@nx/eslint": "^21.0.0",
+    "@nx/js": "^21.0.0",
+    "@nx/next": "^21.0.0",
+    "@nx/workspace": "^21.0.0",
+    "@types/node": "^22.0.0",
+    "drizzle-kit": "^0.30.0",
+    "eslint": "^9.0.0",
+    "nx": "^21.0.0",
+    "prettier": "^3.4.0",
+    "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.38.0",
+    "zod": "^3.24.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

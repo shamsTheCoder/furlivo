@@ -1,0 +1,134 @@
+.section {
+  padding-block: 80px;
+  background: var(--orange);
+  color: #fff;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.content {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex: 1;
+  min-width: 280px;
+}
+
+.iconWrap {
+  width: 56px;
+  height: 56px;
+  background: rgba(255,255,255,0.15);
+  border-radius: var(--r-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  backdrop-filter: blur(8px);
+}
+
+.title {
+  font-size: clamp(1.375rem, 2.5vw, 1.75rem);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.sub {
+  font-size: 0.9375rem;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.6;
+  max-width: 380px;
+}
+
+/* Form */
+.form {
+  flex: 1;
+  min-width: 280px;
+}
+
+.inputWrap {
+  display: flex;
+  background: #fff;
+  border-radius: var(--r-full);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.input {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: 0.9375rem;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  outline: none;
+  min-width: 0;
+}
+
+.input::placeholder { color: var(--text-light); }
+
+.submitBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  background: var(--orange-dark);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: 0 var(--r-full) var(--r-full) 0;
+  transition: background var(--t-fast);
+}
+
+.submitBtn:hover { background: #c43d0f; }
+
+.disclaimer {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.55);
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Success state */
+.success {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--r-xl);
+  padding: 20px 24px;
+  min-width: 280px;
+}
+
+.successIcon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.successTitle { font-size: 1rem; font-weight: 700; color: #fff; }
+.successSub   { font-size: 0.875rem; color: rgba(255,255,255,0.7); margin-top: 3px; }
+
+@media (max-width: 768px) {
+  .inner { flex-direction: column; gap: 32px; }
+  .form, .success, .content { min-width: 100%; }
+}
