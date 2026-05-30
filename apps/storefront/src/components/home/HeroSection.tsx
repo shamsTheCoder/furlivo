@@ -3,14 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { HiStar, HiTruck, HiShieldCheck, HiBolt } from 'react-icons/hi2';
+import { HiStar } from 'react-icons/hi2';
 import styles from './HeroSection.module.css';
-
-const trustItems = [
-  { Icon: HiTruck,       text: 'Free delivery above ₹2,999' },
-  { Icon: HiShieldCheck, text: '30-day guarantee' },
-  { Icon: HiBolt,        text: 'Ships within 24 hrs' },
-];
 
 export default function HeroSection() {
   return (
@@ -24,7 +18,7 @@ export default function HeroSection() {
           <div className={styles.proofPill}>
             <div className={styles.starsRow}>
               {[...Array(5)].map((_, i) => (
-                <HiStar key={i} size={12} style={{ color: '#F59E0B' }} />
+                <HiStar key={i} size={14} style={{ color: '#F59E0B' }} />
               ))}
             </div>
             <span><strong>4.9</strong> · Loved by 12,000+ pet parents</span>
@@ -54,43 +48,32 @@ export default function HeroSection() {
             <Link href="/products/steam-grooming-brush" className={`btn btn-primary btn-xl ${styles.mainCta}`}>
               Add to Cart — ₹2,399
             </Link>
-            <Link href="#how-it-works" className={`btn btn-secondary btn-lg`}>
+            <Link href="#how-it-works" className={`btn btn-secondary btn-xl`}>
               See How It Works
             </Link>
-          </div>
-
-          {/* Trust strip */}
-          <div className={styles.trustStrip}>
-            {trustItems.map(({ Icon, text }, i) => (
-              <React.Fragment key={text}>
-                <div className={styles.trustItem}>
-                  <Icon size={15} className={styles.trustIcon} />
-                  <span>{text}</span>
-                </div>
-                {i < trustItems.length - 1 && <div className={styles.trustDivider} />}
-              </React.Fragment>
-            ))}
           </div>
         </div>
 
         {/* ── Right Column: Product Image ───────────────────── */}
         <div className={styles.visual}>
-          <div className={styles.imageBg} />
+          <div className={styles.imageBg}>
+            <div className={styles.glow} />
+          </div>
 
           <div className={styles.imageWrap}>
             <Image
               src="/images/product-hero.png"
-              alt="Furlivo Steam Pet Grooming Brush — cream body with orange silicone bristles and steam spray"
-              width={560}
-              height={560}
+              alt="Furlivo Steam Pet Grooming Brush"
+              width={650}
+              height={650}
               priority
               className={styles.productImage}
             />
           </div>
 
-          {/* Floating cards */}
+          {/* Floating cards (Glassmorphism) */}
           <div className={`${styles.floatingCard} ${styles.card1}`}>
-            <span className={styles.cardEmoji}>💨</span>
+            <div className={styles.cardIconWrap}>💨</div>
             <div>
               <div className={styles.cardTitle}>Steam Spray</div>
               <div className={styles.cardSub}>Anti-static mist</div>
@@ -98,28 +81,17 @@ export default function HeroSection() {
           </div>
 
           <div className={`${styles.floatingCard} ${styles.card2}`}>
-            <span className={styles.cardEmoji}>✂️</span>
+            <div className={styles.cardIconWrap}>✂️</div>
             <div>
               <div className={styles.cardTitle}>90% Less Shedding</div>
               <div className={styles.cardSub}>Clinically tested</div>
             </div>
           </div>
-
-          <div className={`${styles.floatingCard} ${styles.card3}`}>
-            <HiStar size={14} style={{ color: '#F59E0B' }} />
-            <div className={styles.cardTitle}>4.9 / 5</div>
-            <div className={styles.cardSub}>2,847 reviews</div>
-          </div>
         </div>
 
       </div>
 
-      {/* Bottom wave */}
-      <div className={styles.wave} aria-hidden="true">
-        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,30 C480,60 960,0 1440,30 L1440,60 L0,60 Z" fill="var(--bg-page)" />
-        </svg>
-      </div>
+      {/* Bottom wave removed, transition to TrustBar is cleaner flat */}
     </section>
   );
 }

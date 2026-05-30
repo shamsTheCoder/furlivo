@@ -1,6 +1,10 @@
+'use client';
+
 import Link from 'next/link';
 import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa6';
 import { MdEmail, MdLocationOn } from 'react-icons/md';
+import { SiVisa, SiMastercard, SiRazorpay } from 'react-icons/si';
+import { RiMoneyRupeeCircleLine } from 'react-icons/ri';
 import styles from './Footer.module.css';
 
 const links = {
@@ -42,16 +46,26 @@ export default function Footer() {
             <span className={styles.logoName}>Furlivo</span>
           </Link>
           <p className={styles.tagline}>
-            Spa-quality grooming, at home, for the pet you love.
+            Spa-quality grooming, at home, for the pet you love. We make shedding season effortless.
           </p>
+          
+          {/* Integrated Newsletter / Email capture */}
+          <form className={styles.miniNewsletter} onSubmit={(e) => e.preventDefault()}>
+            <label htmlFor="footer-email" className="sr-only">Email address</label>
+            <div className={styles.miniInputGroup}>
+              <input type="email" id="footer-email" placeholder="Enter email for 10% off" required className={styles.miniInput} />
+              <button type="submit" className={styles.miniSubmit}>Join</button>
+            </div>
+          </form>
+
           <div className={styles.contact}>
             <div className={styles.contactItem}>
-              <MdEmail size={14} />
+              <MdEmail size={16} className={styles.contactIcon} />
               <a href="mailto:hello@furlivo.shop">hello@furlivo.shop</a>
             </div>
             <div className={styles.contactItem}>
-              <MdLocationOn size={14} />
-              <span>Ships across India</span>
+              <MdLocationOn size={16} className={styles.contactIcon} />
+              <span>Ships securely across India</span>
             </div>
           </div>
           <div className={styles.socials}>
@@ -64,37 +78,46 @@ export default function Footer() {
                 className={styles.socialBtn}
                 aria-label={label}
               >
-                <Icon size={16} />
+                <Icon size={18} />
               </a>
             ))}
           </div>
         </div>
 
         {/* Link columns */}
-        {Object.entries(links).map(([col, items]) => (
-          <div key={col} className={styles.linkCol}>
-            <h3 className={styles.colTitle}>{col}</h3>
-            <ul className={styles.linkList}>
-              {items.map((item) => (
-                <li key={item.label}>
-                  <Link href={item.href} className={styles.link}>{item.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        <div className={styles.linksWrapper}>
+          {Object.entries(links).map(([col, items]) => (
+            <div key={col} className={styles.linkCol}>
+              <h3 className={styles.colTitle}>{col}</h3>
+              <ul className={styles.linkList}>
+                {items.map((item) => (
+                  <li key={item.label}>
+                    <Link href={item.href} className={styles.link}>
+                      <span className={styles.linkText}>{item.label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Bottom bar */}
       <div className={styles.bottom}>
         <div className={`container ${styles.bottomInner}`}>
           <p className={styles.copy}>
-            © {new Date().getFullYear()} Furlivo. All rights reserved. · India
+            © {new Date().getFullYear()} Furlivo. All rights reserved. Designed in India.
           </p>
           <div className={styles.payments}>
-            {['UPI', 'Visa', 'Mastercard', 'Razorpay', 'COD'].map((p) => (
-              <span key={p} className={styles.payBadge}>{p}</span>
-            ))}
+            <div className={styles.payIcon} title="UPI"><span style={{ fontWeight: 800, fontSize: '10px' }}>UPI</span></div>
+            <SiVisa size={32} className={styles.payIcon} title="Visa" />
+            <SiMastercard size={32} className={styles.payIcon} title="Mastercard" />
+            <SiRazorpay size={32} className={styles.payIcon} title="Razorpay" />
+            <div className={styles.payIcon} title="Cash on Delivery">
+              <RiMoneyRupeeCircleLine size={24} style={{ marginRight: 2 }} />
+              <span style={{ fontWeight: 700, fontSize: '10px' }}>COD</span>
+            </div>
           </div>
         </div>
       </div>

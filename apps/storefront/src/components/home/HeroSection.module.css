@@ -1,256 +1,272 @@
 .hero {
-  background: var(--cream);
-  padding-top: 0;
-  padding-bottom: 0;
   position: relative;
+  background: var(--bg-subtle);
   overflow: hidden;
-  min-height: calc(100vh - var(--header-total));
-  display: flex;
-  flex-direction: column;
+  padding-top: clamp(60px, 8vw, 100px);
+  padding-bottom: clamp(80px, 10vw, 120px);
 }
 
-/* ── Container layout ──────────────────────────────────── */
 .container {
-  flex: 1;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0;
+  gap: clamp(40px, 8vw, 80px);
   align-items: center;
-  padding-block: 64px;
 }
 
-/* ── Copy side ─────────────────────────────────────────── */
+/* ── Copy ─────────────────────────────────────────────────── */
 .copy {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  max-width: 560px;
-  animation: fadeUp 0.7s var(--ease) both;
+  align-items: flex-start;
+  position: relative;
+  z-index: 10;
 }
 
-/* Social proof pill */
 .proofPill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: #fff;
+  gap: 12px;
+  background: var(--cream-2);
   border: 1px solid var(--border);
+  padding: 8px 16px;
   border-radius: var(--r-full);
-  padding: 6px 14px 6px 10px;
   font-size: 0.8125rem;
-  color: var(--text-muted);
-  width: fit-content;
+  color: var(--text-body);
+  margin-bottom: 32px;
   box-shadow: var(--shadow-sm);
 }
 
-.starsRow { display: flex; gap: 2px; }
+.starsRow {
+  display: flex;
+  gap: 2px;
+}
 
-.proofPill strong { color: var(--text-primary); }
-
-/* Headline */
 .headline {
-  font-size: clamp(2.5rem, 5vw, 3.75rem);
-  font-weight: 800;
-  line-height: 1.08;
+  font-size: clamp(2.5rem, 5vw, 4.25rem);
+  font-weight: 900;
+  line-height: 1.05;
   letter-spacing: -0.04em;
   color: var(--text-primary);
+  margin-bottom: 24px;
 }
 
 .accent {
-  color: var(--orange);
-  position: relative;
   display: inline-block;
-}
-
-/* Underline squiggle */
-.accent::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8'%3E%3Cpath d='M0,4 C25,0 75,8 100,4' stroke='%23FF6B35' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/100% auto no-repeat;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
 }
 
 .sub {
-  font-size: 1.0625rem;
-  line-height: 1.7;
+  font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
   color: var(--text-muted);
-  max-width: 440px;
+  line-height: 1.6;
+  max-width: 520px;
+  margin-bottom: 40px;
 }
-
-.sub em { font-style: italic; color: var(--text-body); }
 
 /* Price */
 .priceRow {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
 }
 
 .price {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
   color: var(--text-primary);
-  letter-spacing: -0.04em;
+  line-height: 1;
+  letter-spacing: -0.03em;
 }
 
 .comparePrice {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--text-light);
   text-decoration: line-through;
 }
 
 .saveBadge {
-  background: var(--orange);
-  color: #fff;
-  font-size: 0.75rem;
+  background: var(--success-pale);
+  color: var(--success);
+  font-size: 0.8125rem;
   font-weight: 700;
-  padding: 4px 10px;
-  border-radius: var(--r-full);
-  letter-spacing: 0.02em;
+  padding: 6px 12px;
+  border-radius: var(--r-md);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* CTAs */
+/* CTA */
 .ctaRow {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.mainCta { flex: 1; min-width: 220px; }
-
-/* Trust strip */
-.trustStrip {
   display: flex;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  padding-top: 8px;
 }
 
-.trustItem {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.8125rem;
-  color: var(--text-muted);
-  font-weight: 500;
+.mainCta {
+  min-width: 240px;
+  font-size: 1.125rem;
 }
 
-.trustIcon { color: var(--orange); flex-shrink: 0; }
-
-.trustDivider {
-  width: 1px;
-  height: 16px;
-  background: var(--border-strong);
-  flex-shrink: 0;
-}
-
-/* ── Visual side ───────────────────────────────────────── */
+/* ── Visual (3D Pop-out) ──────────────────────────────────── */
 .visual {
   position: relative;
+  width: 100%;
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: fadeUp 0.7s 0.15s var(--ease) both;
 }
 
+/* The background box that sits behind the image */
 .imageBg {
   position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 80%;
-  aspect-ratio: 1;
-  background: radial-gradient(circle, rgba(255,107,53,0.12) 0%, rgba(255,107,53,0.04) 50%, transparent 70%);
-  border-radius: 50%;
+  top: 10%;
+  left: 10%;
+  right: 10%;
+  bottom: 5%;
+  background: linear-gradient(135deg, var(--cream) 0%, var(--orange-pale) 100%);
+  border-radius: var(--r-full);
+  box-shadow: inset 0 0 0 1px rgba(255,107,53,0.1), var(--shadow-lg);
+  z-index: 1;
 }
 
+.glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle, rgba(255,107,53,0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50%       { transform: scale(1.05); opacity: 1; }
+}
+
+/* The image breaking out of the box */
 .imageWrap {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  width: 110%;
+  height: 110%;
+  transform: translateY(-5%);
   animation: float 6s ease-in-out infinite;
-  filter: drop-shadow(0 20px 40px rgba(28,25,23,0.12));
 }
 
 .productImage {
-  width: 100%;
-  height: auto;
-  max-width: 500px;
-}
-
-/* Floating cards */
-.floatingCard {
-  position: absolute;
-  z-index: 2;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  padding: 12px 16px;
-  box-shadow: var(--shadow-lg);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  animation: slideDown 0.6s var(--ease) both;
-  backdrop-filter: blur(8px);
-}
-
-.card1 { top: 10%; left: -5%; animation-delay: 0.4s; }
-.card2 { bottom: 15%; left: -10%; animation-delay: 0.55s; }
-.card3 { top: 20%; right: -5%; flex-direction: column; text-align: center; animation-delay: 0.7s; padding: 14px 20px; }
-
-.cardIcon { font-size: 1.5rem; }
-.cardTitle { font-size: 0.875rem; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
-.cardSub   { font-size: 0.75rem; color: var(--text-light); margin-top: 2px; }
-
-/* Bottom wave */
-.wave {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  pointer-events: none;
-}
-
-.wave svg { width: 100%; height: 100%; display: block; }
-
-/* Animations */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  object-fit: contain;
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15));
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-12px); }
+  0%, 100% { transform: translateY(-5%); }
+  50%       { transform: translateY(-2%); }
 }
 
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-12px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── Floating Cards (Glassmorphism) ───────────────────────── */
+.floatingCard {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 16px 20px;
+  border-radius: var(--r-xl);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.08);
+  animation: floatCard 5s ease-in-out infinite;
 }
 
-/* ── Responsive ────────────────────────────────────────── */
+.cardIconWrap {
+  width: 40px;
+  height: 40px;
+  background: var(--orange-pale);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.cardTitle {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.cardSub {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.card1 {
+  top: 15%;
+  left: -5%;
+  animation-delay: 0s;
+}
+
+.card2 {
+  bottom: 20%;
+  right: -5%;
+  animation-delay: 2.5s;
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .headline { font-size: 3rem; }
+  .imageBg { top: 5%; bottom: 5%; left: 5%; right: 5%; }
+}
+
 @media (max-width: 900px) {
   .container {
     grid-template-columns: 1fr;
     text-align: center;
-    padding-block: 48px;
-    gap: 48px;
+    gap: 64px;
   }
-  .copy { max-width: 100%; align-items: center; }
-  .sub { max-width: 100%; }
+  .copy { align-items: center; }
+  .sub { margin-inline: auto; }
+  .priceRow { justify-content: center; }
   .ctaRow { justify-content: center; }
-  .mainCta { flex: initial; }
-  .trustStrip { justify-content: center; }
-  .card1, .card2 { left: 0; }
-  .card3 { right: 0; }
+  
+  .visual {
+    max-width: 500px;
+    margin-inline: auto;
+  }
+  
+  .card1 { left: 0; }
+  .card2 { right: 0; }
 }
 
-@media (max-width: 480px) {
-  .floatingCard { display: none; }
-  .ctaRow { flex-direction: column; }
-  .mainCta { width: 100%; }
+@media (max-width: 640px) {
+  .hero { padding-top: 48px; padding-bottom: 64px; }
+  .proofPill { margin-bottom: 24px; }
+  .headline { font-size: 2.5rem; margin-bottom: 16px; }
+  .priceRow { margin-bottom: 32px; }
+  
+  .card1, .card2 {
+    padding: 12px 16px;
+    gap: 10px;
+  }
+  .cardIconWrap { width: 32px; height: 32px; font-size: 1rem; }
+  .cardTitle { font-size: 0.875rem; }
+  .cardSub { font-size: 0.6875rem; }
 }
