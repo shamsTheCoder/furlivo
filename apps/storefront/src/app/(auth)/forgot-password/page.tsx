@@ -41,10 +41,10 @@ export default function ForgotPasswordPage() {
         <div className={styles.card}>
           <div className={styles.logo}>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-              <FaPaw size={24} style={{ color: 'var(--color-amber)' }} /> Furlivo
+              <FaPaw size={24} style={{ color: 'var(--orange)' }} /> Furlivo
             </Link>
           </div>
-          <div className={fpStyles.successIcon} style={{ color: 'var(--color-amber)' }}>
+          <div className={fpStyles.successIcon} style={{ color: 'var(--orange)' }}>
             <HiOutlineEnvelopeOpen size={64} />
           </div>
           <h1 className={styles.title}>Check your inbox</h1>
@@ -64,7 +64,7 @@ export default function ForgotPasswordPage() {
       <div className={styles.card}>
         <div className={styles.logo}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            <FaPaw size={24} style={{ color: 'var(--color-amber)' }} /> Furlivo
+            <FaPaw size={24} style={{ color: 'var(--orange)' }} /> Furlivo
           </Link>
         </div>
         <h1 className={styles.title}>Reset password</h1>

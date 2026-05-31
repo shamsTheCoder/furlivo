@@ -57,6 +57,8 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Prevent double-submission
+    if (stage === 'loading') return;
     setError('');
 
     if (form.password !== form.confirmPassword) {
@@ -93,8 +95,8 @@ export default function RegisterPage() {
     // If Supabase email confirmation is enabled, `session` will be null.
     // Show the "check your inbox" screen instead of pushing to /account.
     if (data.session) {
+      // Do NOT call router.refresh() — it races push() and freezes the UI.
       router.push('/account');
-      router.refresh();
     } else {
       setStage('confirm_email');
     }
@@ -107,10 +109,10 @@ export default function RegisterPage() {
         <div className={styles.card}>
           <div className={styles.logo}>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-              <FaPaw size={24} style={{ color: 'var(--color-amber)' }} /> Furlivo
+              <FaPaw size={24} style={{ color: 'var(--orange)' }} /> Furlivo
             </Link>
           </div>
-          <div className={regStyles.successIcon} style={{ color: 'var(--color-amber)' }}>
+          <div className={regStyles.successIcon} style={{ color: 'var(--orange)' }}>
             <HiOutlineEnvelopeOpen size={64} />
           </div>
           <h1 className={styles.title}>Check your inbox</h1>
@@ -132,7 +134,7 @@ export default function RegisterPage() {
       <div className={styles.card}>
         <div className={styles.logo}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            <FaPaw size={24} style={{ color: 'var(--color-amber)' }} /> Furlivo
+            <FaPaw size={24} style={{ color: 'var(--orange)' }} /> Furlivo
           </Link>
         </div>
         <h1 className={styles.title}>Create account</h1>

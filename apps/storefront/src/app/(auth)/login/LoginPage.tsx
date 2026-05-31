@@ -40,6 +40,8 @@ export default function LoginPage() {
   /* ── Email / password sign-in ── */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Prevent double-submission if user clicks multiple times
+    if (loading || oauthLoading) return;
     setLoading(true);
     setError('');
 
@@ -52,8 +54,11 @@ export default function LoginPage() {
       return;
     }
 
+    // Do NOT call router.refresh() here — it races router.push() and causes
+    // the UI to freeze for 200–800ms while two navigations fight each other.
+    // The AuthProvider's onAuthStateChange fires immediately and updates
+    // the header/auth state without a manual refresh.
     router.push(redirectTo);
-    router.refresh();
   };
 
   /* ── Google OAuth ── */
@@ -73,7 +78,7 @@ export default function LoginPage() {
       <div className={styles.card}>
         <div className={styles.logo}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-            <FaPaw size={24} style={{ color: 'var(--color-amber)' }} /> Furlivo
+            <FaPaw size={24} style={{ color: 'var(--orange)' }} /> Furlivo
           </Link>
         </div>
         <h1 className={styles.title}>Welcome back</h1>

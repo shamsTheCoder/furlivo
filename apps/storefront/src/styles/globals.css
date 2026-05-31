@@ -264,6 +264,16 @@ h3 { font-size: clamp(1.3rem, 2.5vw, 1.75rem); }
   box-shadow: 0 0 0 3px rgba(255,107,53,0.15);
 }
 .input::placeholder { color: var(--text-light); }
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.input-label, .label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-body);
+}
 .input.error { border-color: var(--error); }
 .input-error { font-size: 0.8125rem; color: var(--error); }
 

@@ -17,6 +17,10 @@ export default function CheckoutPageClient() {
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Track hydration with useState so the condition is stable across renders
+  // and we never violate Rules of Hooks with an early return before other hooks.
+  const [hydrated, setHydrated] = useState(false);
+
   // Refs for cleanup (Leak 2 + Async 1)
   const rzpRef   = useRef<any>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -24,6 +28,7 @@ export default function CheckoutPageClient() {
   // Rehydrate cart from localStorage once on mount (skipHydration: true in store).
   useEffect(() => {
     useCartStore.persist.rehydrate();
+    setHydrated(useCartStore.persist.hasHydrated());
 
     return () => {
       // Leak 2: destroy the Razorpay iFrame + internal event listeners on unmount
@@ -33,17 +38,23 @@ export default function CheckoutPageClient() {
     };
   }, []);
 
-  if (!useCartStore.persist.hasHydrated()) return <CheckoutSkeleton />;
-
   const fmt = (n: number) => `₹${n.toLocaleString('en-IN')}`;
+
+  // Stable handler — no recreation on every render
+  const handlePaymentSelect = useCallback((method: string) => {
+    setPaymentMethod(method);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Prevent double-submission
+    if (isSubmitting) return;
     setIsSubmitting(true);
 
     if (paymentMethod === 'cod') {
       alert('Order Placed via COD Successfully! This is a demo.');
       cartStore.clearCart();
+      setIsSubmitting(false); // reset so button is never permanently stuck
       // Async 2: use router.push instead of window.location.href to avoid
       // a full page reload that discards Next.js router cache.
       router.push('/?order=success');
@@ -100,6 +111,9 @@ export default function CheckoutPageClient() {
     }
   };
 
+  // Show skeleton only during the brief hydration window
+  if (!hydrated) return <CheckoutSkeleton />;
+
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
@@ -150,21 +164,30 @@ export default function CheckoutPageClient() {
             <h2 className={styles.title}>Payment Method</h2>
             <div
               className={`${styles.paymentOption} ${paymentMethod === 'card' ? styles.paymentActive : ''}`}
-              onClick={() => setPaymentMethod('card')}
+              onClick={() => handlePaymentSelect('card')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && handlePaymentSelect('card')}
             >
               <input type="radio" checked={paymentMethod === 'card'} readOnly />
               <label className={styles.label}>Credit / Debit Card</label>
             </div>
             <div
               className={`${styles.paymentOption} ${paymentMethod === 'upi' ? styles.paymentActive : ''}`}
-              onClick={() => setPaymentMethod('upi')}
+              onClick={() => handlePaymentSelect('upi')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && handlePaymentSelect('upi')}
             >
               <input type="radio" checked={paymentMethod === 'upi'} readOnly />
               <label className={styles.label}>UPI</label>
             </div>
             <div
               className={`${styles.paymentOption} ${paymentMethod === 'cod' ? styles.paymentActive : ''}`}
-              onClick={() => setPaymentMethod('cod')}
+              onClick={() => handlePaymentSelect('cod')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && handlePaymentSelect('cod')}
             >
               <input type="radio" checked={paymentMethod === 'cod'} readOnly />
               <label className={styles.label}>Cash on Delivery (COD)</label>

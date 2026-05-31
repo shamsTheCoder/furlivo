@@ -1,0 +1,146 @@
+.main {
+  padding-top: calc(var(--header-total) + 48px);
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 6rem;
+}
+
+.backRow { margin-bottom: 1.5rem; }
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--t-fast) var(--ease);
+}
+
+.backLink:hover { color: var(--orange); }
+
+.title {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  margin-bottom: 2.5rem;
+}
+
+.sections {
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Messages */
+.message {
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--r-md);
+}
+
+.message-success {
+  background: var(--success-pale);
+  color: var(--success);
+}
+
+.message-error {
+  background: var(--error-pale);
+  color: var(--error);
+}
+
+/* Preferences */
+.preferenceList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.preferenceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  gap: 1rem;
+}
+
+.preferenceRow:last-child { border-bottom: none; }
+
+.preferenceLabel {
+  font-size: 0.9375rem;
+  color: var(--text-body);
+}
+
+/* Toggle switch */
+.toggle { position: relative; flex-shrink: 0; }
+
+.toggleInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  width: 44px;
+  height: 24px;
+  background: var(--border-strong);
+  border-radius: var(--r-full);
+  position: relative;
+  transition: background var(--t-base) var(--ease);
+}
+
+.toggleSlider::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--r-full);
+  background: #fff;
+  top: 3px;
+  left: 3px;
+  transition: transform var(--t-base) var(--ease-spring), box-shadow var(--t-base) var(--ease);
+  box-shadow: var(--shadow-sm);
+}
+
+.toggleInput:checked + .toggleSlider {
+  background: var(--orange);
+}
+
+.toggleInput:checked + .toggleSlider::after {
+  transform: translateX(20px);
+}
+
+@media (max-width: 640px) {
+  .formRow { grid-template-columns: 1fr; }
+}

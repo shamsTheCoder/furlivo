@@ -205,6 +205,8 @@
   animation: floatCard 5s ease-in-out infinite;
   /* GPU layer — keeps the float animation off the main thread */
   will-change: transform;
+  /* Decorative only — must NOT intercept clicks meant for CTA buttons */
+  pointer-events: none;
 }
 
 .cardIconWrap {
