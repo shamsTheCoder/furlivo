@@ -4,12 +4,11 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useCartStore } from '@/store/cart.store';
-import Spinner from '@/components/shared/Spinner';
+import { useToastStore } from '@/store/toast.store';
 import {
   HiStar, HiTruck, HiShieldCheck, HiArrowPath,
   HiBolt, HiChevronRight, HiMinus, HiPlus,
-  HiShoppingBag, HiHeart,
+  HiShoppingBag, HiHeart, HiOutlineHeart,
 } from 'react-icons/hi2';
 import { RiSecurePaymentLine } from 'react-icons/ri';
 import styles from './ProductPage.module.css';
@@ -36,22 +35,48 @@ const highlights = [
 
 export default function ProductPageClient() {
   const [activeImg, setActiveImg]         = useState(0);
-  const [activeVariant, setActiveVariant]   = useState('sage');
-  const [qty, setQty]                       = useState(1);
-  const [addedToCart, setAddedToCart]       = useState(false);
-  const [isBuyingNow, setIsBuyingNow]       = useState(false);
+  const [activeVariant, setActiveVariant] = useState('sage');
+  const [qty, setQty]                     = useState(1);
+  const [addedToCart, setAddedToCart]     = useState(false);
+  const [isBuyingNow, setIsBuyingNow]     = useState(false);
+  const [isWishlisted, setIsWishlisted]   = useState(false);
+  const [zoomStyle, setZoomStyle]         = useState<React.CSSProperties>({ transformOrigin: 'center', transform: 'scale(1)' });
+  const [isActionsVisible, setIsActionsVisible] = useState(true);
 
-  // Ref for the "Added!" reset timer — cleared on unmount to prevent setState
-  // being called on an unmounted component (memory leak).
+  // Refs
   const addedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
   const addItem = useCartStore(s => s.addItem);
+  const addToast = useToastStore(s => s.addToast);
   const unitPrice = 2399;
 
   // Clear any pending timer when the component unmounts (fixes Leak 1)
   useEffect(() => () => {
     if (addedTimerRef.current) clearTimeout(addedTimerRef.current);
+  }, []);
+
+  // Intersection Observer for Smart Sticky Bar
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsActionsVisible(entry.isIntersecting),
+      { threshold: 0, rootMargin: '0px 0px -100px 0px' }
+    );
+    if (actionsRef.current) observer.observe(actionsRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Zoom Handlers
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomStyle({ transformOrigin: `${x}% ${y}%`, transform: 'scale(2)' });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setZoomStyle({ transformOrigin: 'center center', transform: 'scale(1)' });
   }, []);
 
   const handleVariantChange = useCallback((v: typeof variants[0]) => {
@@ -76,10 +101,16 @@ export default function ProductPageClient() {
   const handleAddToCart = useCallback(() => {
     addToCart();
     setAddedToCart(true);
-    // Clear any existing timer before setting a new one (prevents stacking)
     if (addedTimerRef.current) clearTimeout(addedTimerRef.current);
     addedTimerRef.current = setTimeout(() => setAddedToCart(false), 2500);
-  }, [addToCart]);
+    
+    addToast({
+      type: 'success',
+      title: 'Added to cart',
+      message: `${qty}x Steam Grooming Brush has been added to your cart.`,
+      duration: 4000
+    });
+  }, [addToCart, qty, addToast]);
 
   const handleBuyNow = useCallback(() => {
     setIsBuyingNow(true);
@@ -119,13 +150,18 @@ export default function ProductPageClient() {
             ))}
           </div>
 
-          <div className={styles.mainImg}>
+          <div 
+            className={styles.mainImg}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+          >
             <Image
               src={images[activeImg]!.src}
               alt={images[activeImg]!.alt}
               fill priority
               className={styles.mainImgEl}
               sizes="(max-width: 768px) 100vw, 50vw"
+              style={zoomStyle}
             />
             <div className={`badge badge-orange ${styles.saleBadge}`}>Save ₹1,000</div>
           </div>
@@ -182,37 +218,46 @@ export default function ProductPageClient() {
             </div>
           </div>
 
-          {/* Qty + Add to Cart */}
-          <div className={styles.addRow}>
-            <div className={styles.qty}>
-              <button className={styles.qtyBtn} onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Decrease">
-                <HiMinus size={16} />
-              </button>
-              <span className={styles.qtyNum}>{qty}</span>
-              <button className={styles.qtyBtn} onClick={() => setQty(qty + 1)} aria-label="Increase">
-                <HiPlus size={16} />
+          {/* Actions: Qty, Add to Cart, Buy Now */}
+          <div className={styles.actionGroup} ref={actionsRef}>
+            <div className={styles.addRow}>
+              <div className={styles.qty}>
+                <button className={styles.qtyBtn} onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Decrease">
+                  <HiMinus size={16} />
+                </button>
+                <span className={styles.qtyNum}>{qty}</span>
+                <button className={styles.qtyBtn} onClick={() => setQty(qty + 1)} aria-label="Increase">
+                  <HiPlus size={16} />
+                </button>
+              </div>
+              <button
+                className={`btn btn-primary btn-lg ${styles.addBtn} ${addedToCart ? styles.addBtnSuccess : ''}`}
+                onClick={handleAddToCart}
+              >
+                <HiShoppingBag size={18} />
+                {addedToCart ? '✓ Added to Cart!' : `Add to Cart — ${fmt(total)}`}
               </button>
             </div>
+
             <button
-              className={`btn btn-primary btn-lg ${styles.addBtn} ${addedToCart ? styles.addBtnSuccess : ''}`}
-              onClick={handleAddToCart}
+              className="btn btn-dark btn-full btn-lg"
+              onClick={handleBuyNow}
+              disabled={isBuyingNow}
             >
-              <HiShoppingBag size={18} />
-              {addedToCart ? '✓ Added to Cart!' : `Add to Cart — ${fmt(total)}`}
+              {isBuyingNow
+                ? <><Spinner size="sm" color="white" /> Taking you to checkout…</>
+                : 'Buy Now — Express Checkout'
+              }
+            </button>
+            
+            <button 
+              className={styles.wishlistBtn} 
+              onClick={() => setIsWishlisted(!isWishlisted)}
+            >
+              {isWishlisted ? <HiHeart size={18} className={styles.wishlistIconActive} /> : <HiOutlineHeart size={18} />}
+              {isWishlisted ? 'Saved to Wishlist' : 'Add to Wishlist'}
             </button>
           </div>
-
-          {/* Buy Now */}
-          <button
-            className="btn btn-dark btn-full btn-lg"
-            onClick={handleBuyNow}
-            disabled={isBuyingNow}
-          >
-            {isBuyingNow
-              ? <><Spinner size="sm" color="white" /> Taking you to checkout…</>
-              : 'Buy Now — Express Checkout'
-            }
-          </button>
 
           {/* Secure payment strip */}
           <div className={styles.secureStrip}>
@@ -284,8 +329,41 @@ export default function ProductPageClient() {
         </div>
       </div>
 
+      {/* ── Reviews Section ───────────────────────────── */}
+      <div id="reviews" className={`container ${styles.reviewsSection}`}>
+        <div className={styles.reviewsHeader}>
+          <h2 className={styles.reviewsTitle}>Customer Reviews</h2>
+          <div className={styles.reviewsSummary}>
+            <div className={styles.stars}>
+              {[...Array(5)].map((_, i) => <HiStar key={i} size={24} style={{ color: '#F59E0B' }} />)}
+            </div>
+            <span>4.9 out of 5 based on 2,847 reviews</span>
+          </div>
+        </div>
+        <div className={styles.reviewsGrid}>
+          {[
+            { name: 'Sarah M.', date: 'May 12, 2026', text: "Absolute game changer for my golden retriever. He actually enjoys grooming now and the steam stops the hair from flying everywhere. Highly recommend!", rating: 5 },
+            { name: 'David K.', date: 'Apr 28, 2026', text: "Works exactly as advertised. The silicone bristles are gentle on my cat's skin but manage to pull out an unbelievable amount of undercoat. The battery lasts ages.", rating: 5 },
+            { name: 'Emily R.', date: 'Mar 15, 2026', text: "I was skeptical about the steam feature, but it really works. It leaves their coat feeling incredibly soft and moisturized. Best grooming tool I've bought.", rating: 5 }
+          ].map((r, i) => (
+            <div key={i} className={styles.reviewCard}>
+              <div className={styles.reviewCardHeader}>
+                <div className={styles.reviewAuthor}>
+                  <strong>{r.name}</strong>
+                  <span className={styles.reviewDate}>{r.date}</span>
+                </div>
+                <div className={styles.stars}>
+                  {[...Array(r.rating)].map((_, j) => <HiStar key={j} size={14} style={{ color: '#F59E0B' }} />)}
+                </div>
+              </div>
+              <p className={styles.reviewText}>{r.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ── Sticky Mobile Bar ───────────────────────── */}
-      <div className={styles.stickyBar}>
+      <div className={`${styles.stickyBar} ${!isActionsVisible ? styles.stickyBarVisible : ''}`}>
         <div className={styles.stickyInfo}>
           <span className={styles.stickyName}>Steam Grooming Brush</span>
           <span className={styles.stickyPrice}>{fmt(unitPrice)}</span>
