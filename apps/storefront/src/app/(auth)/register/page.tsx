@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import Spinner from '@/components/shared/Spinner';
 import styles from '../auth.module.css';
 
 export default function RegisterPage() {
@@ -88,7 +89,7 @@ export default function RegisterPage() {
           {error && <p className={styles.error}>{error}</p>}
 
           <button type="submit" className="btn btn-primary btn-full btn-lg" disabled={loading}>
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? <><Spinner size="sm" color="white" /> Creating account…</> : 'Create Account'}
           </button>
         </form>
 

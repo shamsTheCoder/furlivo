@@ -1,0 +1,74 @@
+.page {
+  padding-block: 48px;
+}
+
+.title {
+  height: 2rem;
+  width: 160px;
+  margin-bottom: 32px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  align-items: start;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.item {
+  display: flex;
+  gap: 20px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+}
+
+.img {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.name  { height: 1.2em; width: 60%; }
+.desc  { height: 1em;   width: 40%; }
+.price { height: 1.4em; width: 30%; margin-top: 4px; }
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+.qty { height: 40px; width: 120px; border-radius: var(--r-full); }
+.remove { height: 40px; width: 80px; border-radius: var(--r-full); }
+
+/* ── Summary ── */
+.summary {
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summaryTitle { height: 1.5em; width: 50%; margin-bottom: 8px; }
+.summaryRow   { height: 1em; }
+.summaryTotal { height: 1.4em; width: 80%; }
+.btn          { height: 52px; margin-top: 8px; border-radius: var(--r-full); }
+
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+}

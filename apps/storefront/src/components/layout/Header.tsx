@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { HiShoppingBag, HiMagnifyingGlass, HiUser, HiBars3, HiXMark, HiChevronDown } from 'react-icons/hi2';
+import { useCartStore } from '@/store/cart.store';
 import styles from './Header.module.css';
 
 const announcements = [
@@ -28,8 +29,15 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [cartCount] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
   const [announceIndex, setAnnounceIndex] = useState(0);
+
+  const storeCount = useCartStore((s) => s.itemCount);
+
+  // Hydration-safe cart count
+  useEffect(() => {
+    setCartCount(storeCount);
+  }, [storeCount]);
 
   // Announcement auto-slide
   useEffect(() => {

@@ -27,7 +27,12 @@ export default function HeroSection() {
           {/* Headline */}
           <h1 className={styles.headline}>
             Give Your Pet a{' '}
-            <span className={styles.accent}>Spa Day</span>{' '}
+            <span className={styles.accentWrap}>
+              <span className={styles.accent}>Spa Day</span>
+              <svg className={styles.underline} viewBox="0 0 200 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5,15 Q100,5 195,15" stroke="currentColor" strokeWidth="6" fill="transparent" strokeLinecap="round" />
+              </svg>
+            </span>{' '}
             at Home
           </h1>
 
@@ -52,12 +57,21 @@ export default function HeroSection() {
               See How It Works
             </Link>
           </div>
+
+          {/* Trust bullets */}
+          <div className={styles.trustBullets}>
+            <span>🚚 Free delivery above ₹2,999</span>
+            <span className={styles.bulletSeparator}>|</span>
+            <span>🛡️ 30-day guarantee</span>
+            <span className={styles.bulletSeparator}>|</span>
+            <span>⚡️ Ships within 24 hrs</span>
+          </div>
         </div>
 
         {/* ── Right Column: Product Image ───────────────────── */}
         <div className={styles.visual}>
           <div className={styles.imageBg}>
-            <div className={styles.glow} />
+            {/* The white square box shown in screenshot */}
           </div>
 
           <div className={styles.imageWrap}>
@@ -85,6 +99,14 @@ export default function HeroSection() {
             <div>
               <div className={styles.cardTitle}>90% Less Shedding</div>
               <div className={styles.cardSub}>Clinically tested</div>
+            </div>
+          </div>
+
+          <div className={`${styles.floatingCard} ${styles.card3}`}>
+            <div className={styles.cardIconWrapStar}><HiStar size={20} color="#F59E0B" /></div>
+            <div>
+              <div className={styles.cardTitle}>4.9 / 5</div>
+              <div className={styles.cardSub}>2,847 reviews</div>
             </div>
           </div>
         </div>

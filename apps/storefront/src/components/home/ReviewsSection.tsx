@@ -82,6 +82,13 @@ function ReviewCard({ r }: { r: typeof reviews[0] }) {
       </div>
       <FaQuoteLeft size={18} className={styles.quoteIcon} />
       <p className={styles.body}>{r.body}</p>
+      
+      {r.img && (
+        <div className={styles.reviewImgWrap}>
+          <Image src={r.img} alt="Customer photo" fill className={styles.reviewImg} sizes="320px" />
+        </div>
+      )}
+
       <div className={styles.reviewer}>
         <div className={styles.avatar}>{r.name[0]}</div>
         <div>

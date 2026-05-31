@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import Link from 'next/link';
 import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa6';
 import { MdEmail, MdLocationOn } from 'react-icons/md';
@@ -35,6 +37,19 @@ const social = [
 ];
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setStatus('loading');
+    setTimeout(() => {
+      setStatus('success');
+      setEmail('');
+    }, 1000);
+  };
+
   return (
     <footer className={styles.footer} role="contentinfo">
       <div className={`container ${styles.top}`}>
@@ -50,13 +65,30 @@ export default function Footer() {
           </p>
           
           {/* Integrated Newsletter / Email capture */}
-          <form className={styles.miniNewsletter} onSubmit={(e) => e.preventDefault()}>
-            <label htmlFor="footer-email" className="sr-only">Email address</label>
-            <div className={styles.miniInputGroup}>
-              <input type="email" id="footer-email" placeholder="Enter email for 10% off" required className={styles.miniInput} />
-              <button type="submit" className={styles.miniSubmit}>Join</button>
+          {status === 'success' ? (
+            <div className={styles.miniSuccess}>
+              <span style={{ color: 'var(--success)' }}>✓</span> You're on the list!
             </div>
-          </form>
+          ) : (
+            <form className={styles.miniNewsletter} onSubmit={handleSubmit}>
+              <label htmlFor="footer-email" className="sr-only">Email address</label>
+              <div className={styles.miniInputGroup}>
+                <input 
+                  type="email" 
+                  id="footer-email" 
+                  placeholder="Enter email for 15% off" 
+                  required 
+                  className={styles.miniInput}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={status === 'loading'}
+                />
+                <button type="submit" className={styles.miniSubmit} disabled={status === 'loading'}>
+                  {status === 'loading' ? '...' : 'Join'}
+                </button>
+              </div>
+            </form>
+          )}
 
           <div className={styles.contact}>
             <div className={styles.contactItem}>

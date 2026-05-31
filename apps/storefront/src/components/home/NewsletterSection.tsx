@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { MdOutlineMailOutline, MdArrowForward } from 'react-icons/md';
+import Spinner from '@/components/shared/Spinner';
 import styles from './NewsletterSection.module.css';
 
 export default function NewsletterSection() {
@@ -74,7 +75,7 @@ export default function NewsletterSection() {
                       disabled={status === 'loading'}
                     >
                       {status === 'loading' ? (
-                        <span className={styles.spinner} />
+                        <Spinner size="sm" color="white" />
                       ) : (
                         <>
                           <span className="hide-mobile">Get 15% Off</span>

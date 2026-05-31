@@ -62,6 +62,20 @@
   margin-bottom: 8px;
 }
 
+.miniSuccess {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding: 12px 14px;
+  background: rgba(22, 163, 74, 0.1);
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  border-radius: var(--r-md);
+  color: #fff;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .miniInputGroup {
   display: flex;
   background: rgba(255,255,255,0.06);

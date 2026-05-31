@@ -2,7 +2,10 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useCartStore } from '@/store/cart.store';
+import Spinner from '@/components/shared/Spinner';
 import {
   HiStar, HiTruck, HiShieldCheck, HiArrowPath,
   HiBolt, HiChevronRight, HiMinus, HiPlus,
@@ -12,16 +15,16 @@ import { RiSecurePaymentLine } from 'react-icons/ri';
 import styles from './ProductPage.module.css';
 
 const images = [
-  { src: '/images/product-hero.png', alt: 'Furlivo Steam Brush — steam spray active' },
-  { src: '/images/flatlay.png',      alt: 'Furlivo brush flat lay with USB-C cable' },
-  { src: '/images/lifestyle.png',    alt: 'Person grooming golden retriever' },
-  { src: '/images/cat-lifestyle.png',alt: 'Person grooming Persian cat' },
+  { src: '/images/product-hero.png', alt: 'Furlivo Steam Pet Grooming Brush — active steam spray' },
+  { src: '/images/flatlay.png',      alt: 'Furlivo Steam Grooming Brush flat lay with USB-C charging cable' },
+  { src: '/images/lifestyle.png',    alt: 'Removing shedding fur with Furlivo Steam Grooming Brush on a golden retriever' },
+  { src: '/images/cat-lifestyle.png',alt: 'Removing shedding fur with Furlivo Steam Grooming Brush on a Persian cat' },
 ];
 
 const variants = [
-  { id: 'sage',    label: 'Sage Green',   color: '#9DB5A3' },
-  { id: 'cream',   label: 'Cream White',  color: '#F5F0E8' },
-  { id: 'espresso',label: 'Espresso',     color: '#5C4A36' },
+  { id: 'sage',    label: 'Sage Green',   color: '#9DB5A3', imgIndex: 0 },
+  { id: 'cream',   label: 'Cream White',  color: '#F5F0E8', imgIndex: 1 },
+  { id: 'espresso',label: 'Espresso',     color: '#5C4A36', imgIndex: 2 },
 ];
 
 const highlights = [
@@ -32,17 +35,48 @@ const highlights = [
 ];
 
 export default function ProductPageClient() {
-  const [activeImg, setActiveImg]       = useState(0);
-  const [activeVariant, setActiveVariant] = useState('sage');
-  const [qty, setQty]                   = useState(1);
-  const [addedToCart, setAddedToCart]   = useState(false);
+  const [activeImg, setActiveImg]         = useState(0);
+  const [activeVariant, setActiveVariant]   = useState('sage');
+  const [qty, setQty]                       = useState(1);
+  const [addedToCart, setAddedToCart]       = useState(false);
+  const [isBuyingNow, setIsBuyingNow]       = useState(false);
+
+  const router = useRouter();
+  const addItem = useCartStore(s => s.addItem);
+  const unitPrice = 2399;
+
+  const handleVariantChange = (v: typeof variants[0]) => {
+    setActiveVariant(v.id);
+    if (v.imgIndex !== undefined) {
+      setActiveImg(v.imgIndex);
+    }
+  };
+
+  const addToCart = () => {
+    addItem({
+      productId: 'steam-grooming-brush',
+      variantId: activeVariant,
+      name: 'Steam Grooming Brush',
+      variantName: variants.find(v => v.id === activeVariant)?.label,
+      price: unitPrice,
+      quantity: qty,
+      imageUrl: images[activeImg]!.src,
+      slug: 'steam-grooming-brush'
+    });
+  };
 
   const handleAddToCart = () => {
+    addToCart();
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2500);
   };
 
-  const unitPrice = 2399;
+  const handleBuyNow = () => {
+    setIsBuyingNow(true);
+    addToCart();
+    router.push('/checkout');
+  };
+
   const total = unitPrice * qty;
   const fmt = (n: number) => `₹${n.toLocaleString('en-IN')}`;
 
@@ -128,7 +162,7 @@ export default function ProductPageClient() {
                 <button
                   key={v.id}
                   className={`${styles.variantBtn} ${activeVariant === v.id ? styles.variantActive : ''}`}
-                  onClick={() => setActiveVariant(v.id)}
+                  onClick={() => handleVariantChange(v)}
                   title={v.label}
                   aria-label={v.label}
                   aria-pressed={activeVariant === v.id}
@@ -159,14 +193,15 @@ export default function ProductPageClient() {
           </div>
 
           {/* Buy Now */}
-          <button className="btn btn-dark btn-full btn-lg">
-            Buy Now — Express Checkout
-          </button>
-
-          {/* Wishlist */}
-          <button className={styles.wishlistBtn}>
-            <HiHeart size={16} />
-            Save to Wishlist
+          <button
+            className="btn btn-dark btn-full btn-lg"
+            onClick={handleBuyNow}
+            disabled={isBuyingNow}
+          >
+            {isBuyingNow
+              ? <><Spinner size="sm" color="white" /> Taking you to checkout…</>
+              : 'Buy Now — Express Checkout'
+            }
           </button>
 
           {/* Secure payment strip */}
@@ -233,7 +268,7 @@ export default function ProductPageClient() {
 
           <div className={styles.descSide}>
             <div className={styles.descImage}>
-              <Image src="/images/cat-lifestyle.png" alt="Persian cat being groomed with Furlivo brush" fill className={styles.descImg} sizes="400px" />
+              <Image src="/images/cat-lifestyle.png" alt="Removing shedding fur with Furlivo Steam Grooming Brush on a Persian cat" fill className={styles.descImg} sizes="400px" />
             </div>
           </div>
         </div>

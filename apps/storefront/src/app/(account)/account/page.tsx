@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
+import SignOutButton from './SignOutButton';
 import styles from './account.module.css';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
@@ -53,9 +54,7 @@ export default async function AccountPage() {
             ))}
           </div>
 
-          <form action="/api/auth/signout" method="POST" className={styles.signoutWrap}>
-            <button type="submit" className="btn btn-ghost">Sign Out</button>
-          </form>
+          <SignOutButton />
         </div>
       </main>
       <Footer />

@@ -32,9 +32,39 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export const revalidate = 60;
 
 export default async function ProductPage({ params }: Props) {
-  await params; // resolve params
+  const { slug } = await params;
+  const name = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: name,
+    image: 'https://furlivo.shop/images/product-hero.png',
+    description: `Shop the Furlivo ${name}. The steam grooming brush that reduces shedding by 90%.`,
+    brand: {
+      '@type': 'Brand',
+      name: 'Furlivo',
+    },
+    offers: {
+      '@type': 'Offer',
+      url: `https://furlivo.shop/products/${slug}`,
+      priceCurrency: 'INR',
+      price: '2399',
+      availability: 'https://schema.org/InStock',
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '2847',
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
       <main>
         <ProductPageClient />

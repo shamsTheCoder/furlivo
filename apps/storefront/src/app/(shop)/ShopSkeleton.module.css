@@ -1,0 +1,45 @@
+/* Shop loading skeleton — generic page scaffold */
+.page {
+  padding-top: var(--header-total);
+  min-height: 100vh;
+}
+
+/* Page hero area (used by /products) */
+.hero {
+  padding-block: 56px;
+  background: var(--bg-cream);
+  margin-bottom: 0;
+}
+.heroEyebrow { height: 0.8em; width: 160px; margin-bottom: 16px; }
+.heroTitle   { height: 2rem;  width: 280px; margin-bottom: 12px; }
+.heroSub     { height: 1em;   width: 340px; }
+
+/* Product grid (3 cards) */
+.section { padding-block: 64px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.card {
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.cardImg   { height: 280px; width: 100%; }
+.cardBody  { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.cardTitle { height: 1.2em; width: 70%; }
+.cardDesc  { height: 1em;   width: 90%; }
+.cardPrice { height: 1.4em; width: 40%; }
+.cardBtn   { height: 44px;  border-radius: var(--r-full); margin-top: 4px; }
+
+@media (max-width: 1024px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+  .hero { padding-block: 40px; }
+}

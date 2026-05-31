@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import Spinner from '@/components/shared/Spinner';
 import styles from '../auth.module.css';
 
 export default function LoginPage() {
@@ -12,6 +13,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +78,7 @@ export default function LoginPage() {
           </div>
 
           <button type="submit" className="btn btn-primary btn-full btn-lg" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? <><Spinner size="sm" color="white" /> Signing in…</> : 'Sign In'}
           </button>
         </form>
 
@@ -89,12 +91,14 @@ export default function LoginPage() {
 
         <button
           className={`btn btn-ghost btn-full ${styles.oauthBtn}`}
+          disabled={oauthLoading}
           onClick={async () => {
+            setOauthLoading(true);
             const supabase = createClient();
             await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${window.location.origin}/account` } });
           }}
         >
-          <span>🔵</span> Continue with Google
+          {oauthLoading ? <><Spinner size="sm" color="dark" /> Redirecting…</> : <><span>🔵</span> Continue with Google</>}
         </button>
       </div>
     </div>

@@ -115,14 +115,17 @@ export default function HowItWorks() {
             <div className={styles.imageCard}>
 
               {/* Image */}
-              <div className={styles.imageWrap} key={active}>
-                <Image
-                  src={current.img}
-                  alt={current.title}
-                  fill
-                  className={styles.img}
-                  sizes="(max-width: 900px) 100vw, 50vw"
-                />
+              <div className={styles.imageWrap}>
+                {steps.map((step, idx) => (
+                  <Image
+                    key={step.num}
+                    src={step.img}
+                    alt={step.title}
+                    fill
+                    className={`${styles.img} ${idx === active ? styles.imgActive : styles.imgHidden}`}
+                    sizes="(max-width: 900px) 100vw, 50vw"
+                  />
+                ))}
                 <div className={styles.imgOverlay} />
               </div>
 
