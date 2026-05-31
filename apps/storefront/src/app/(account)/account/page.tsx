@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
+import { HiOutlineCube, HiOutlineHeart, HiOutlineCog6Tooth } from 'react-icons/hi2';
+import { FaPaw } from 'react-icons/fa6';
 import SignOutButton from './SignOutButton';
 import styles from './account.module.css';
 import { createClient } from '@/lib/supabase/server';
@@ -28,7 +30,7 @@ export default async function AccountPage() {
         <div className="container">
           <div className={styles.header}>
             <div className={styles.avatar}>
-              {customer?.first_name?.[0] ?? user.email?.[0] ?? '🐾'}
+              {customer?.first_name?.[0] ?? user.email?.[0] ?? <FaPaw size={28} />}
             </div>
             <div>
               <h1 className={styles.name}>
@@ -40,9 +42,9 @@ export default async function AccountPage() {
 
           <div className={styles.grid}>
             {[
-              { icon: '📦', label: 'My Orders', desc: 'Track and manage your orders', href: '/account/orders' },
-              { icon: '❤️', label: 'Wishlist', desc: 'Products you have saved', href: '/account/wishlist' },
-              { icon: '⚙️', label: 'Settings', desc: 'Manage your account details', href: '/account/settings' },
+              { icon: <HiOutlineCube />, label: 'My Orders', desc: 'Track and manage your orders', href: '/account/orders' },
+              { icon: <HiOutlineHeart />, label: 'Wishlist', desc: 'Products you have saved', href: '/account/wishlist' },
+              { icon: <HiOutlineCog6Tooth />, label: 'Settings', desc: 'Manage your account details', href: '/account/settings' },
             ].map((item) => (
               <Link key={item.label} href={item.href} className={styles.card}>
                 <span className={styles.cardIcon}>{item.icon}</span>

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import '@/styles/globals.css';
+import { AuthProvider } from '@/components/layout/AuthProvider';
+import { ToastContainer } from '@/components/shared/ToastContainer';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://furlivo.shop'),
@@ -29,7 +31,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>{children}</body>
+      <body>
+        <AuthProvider>
+          {children}
+          <ToastContainer />
+        </AuthProvider>
+      </body>
     </html>
   );
 }
