@@ -10,10 +10,17 @@ import Razorpay from 'razorpay';
  * The unused Supabase admin client that was here has been removed (Leak 5) —
  * it was allocating connection pools on every request without being used.
  */
-const razorpay = new Razorpay({
-  key_id:     process.env.RAZORPAY_KEY_ID     ?? '',
-  key_secret: process.env.RAZORPAY_KEY_SECRET ?? '',
-});
+let razorpayInstance: Razorpay | null = null;
+
+function getRazorpay(): Razorpay {
+  if (!razorpayInstance) {
+    razorpayInstance = new Razorpay({
+      key_id:     process.env.RAZORPAY_KEY_ID     ?? '',
+      key_secret: process.env.RAZORPAY_KEY_SECRET ?? '',
+    });
+  }
+  return razorpayInstance;
+}
 
 export async function POST(req: Request) {
   try {
@@ -24,7 +31,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Amount is required' }, { status: 400 });
     }
 
-    const order = await razorpay.orders.create({
+    const order = await getRazorpay().orders.create({
       amount:   Math.round(amount * 100), // paise
       currency: 'INR',
       receipt:  receipt ?? `rcpt_${Date.now()}`,

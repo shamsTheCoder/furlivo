@@ -2,17 +2,16 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import HeroSection from '@/components/home/HeroSection';
-import TrustBar from '@/components/home/TrustBar';
-import BenefitsSection from '@/components/home/BenefitsSection';
-import HowItWorks from '@/components/home/HowItWorks';
-import ReviewsSection from '@/components/home/ReviewsSection';
-import FAQSection from '@/components/home/FAQSection';
+import HeroBanner from '@/components/home/HeroBanner';
+import CategoryGrid from '@/components/home/CategoryGrid';
+import ProductGrid from '@/components/home/ProductGrid';
+import BrandValues from '@/components/home/BrandValues';
+import SocialFeed from '@/components/home/SocialFeed';
 import NewsletterSection from '@/components/home/NewsletterSection';
 
 export const metadata: Metadata = {
-  title: 'Furlivo — Steam Pet Grooming Brush | Free Shipping',
-  description: 'Give your pet a spa day at home. The Furlivo Steam Grooming Brush reduces shedding by 90% with cool-mist technology. Free shipping on orders over $35.',
+  title: 'Furlivo | Premium Pet Grooming Essentials',
+  description: 'Shop Furlivo for premium pet grooming tools, accessories, and bundles. Give your pet a spa day at home with our bestselling steam grooming brush.',
 };
 
 export default function HomePage() {
@@ -20,9 +19,9 @@ export default function HomePage() {
     <>
       <Header />
       <main>
-        {/* Above-the-fold: render immediately — no Suspense */}
-        <HeroSection />
-        <TrustBar />
+        {/* Above-the-fold: Promotional Hero Banner and Category Discovery */}
+        <HeroBanner />
+        <CategoryGrid />
 
         {/*
           Below-the-fold sections are wrapped in Suspense so Next.js can
@@ -30,10 +29,9 @@ export default function HomePage() {
           renders server-side. null fallback = no visible shift.
         */}
         <Suspense fallback={null}>
-          <BenefitsSection />
-          <HowItWorks />
-          <ReviewsSection />
-          <FAQSection />
+          <ProductGrid />
+          <BrandValues />
+          <SocialFeed />
           <NewsletterSection />
         </Suspense>
       </main>
