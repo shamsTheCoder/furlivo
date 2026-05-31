@@ -47,16 +47,12 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
   const [announceIndex, setAnnounceIndex] = useState(0);
   const [signingOut, setSigningOut] = useState(false);
 
-  const storeCount = useCartStore((s) => s.itemCount);
-
-  // Hydration-safe cart count
-  useEffect(() => {
-    setCartCount(storeCount);
-  }, [storeCount]);
+  // Read cart count directly from Zustand — no intermediate useState needed.
+  // Mirroring via useState + useEffect caused 2 re-renders per cart update (Perf 1).
+  const cartCount = useCartStore((s) => s.itemCount);
 
   // Announcement auto-slide
   useEffect(() => {
@@ -66,21 +62,29 @@ export default function Header() {
     return () => clearInterval(interval);
   }, []);
 
-  // Smart scroll: hide on scroll down, show on scroll up
+  // Smart scroll: hide on scroll down, show on scroll up.
+  // RAF-throttled so the handler fires at most once per animation frame
+  // instead of on every raw scroll event (up to 120×/sec on 120Hz displays).
+  // The pending RAF ID is cancelled in cleanup to prevent stale calls (Leak 6).
   useEffect(() => {
     let lastScroll = 0;
+    let rafId = 0;
+
     const handler = () => {
-      const currentScroll = window.scrollY;
-      setScrolled(currentScroll > 10);
-      if (currentScroll > lastScroll && currentScroll > 100) {
-        setHidden(true);
-      } else {
-        setHidden(false);
-      }
-      lastScroll = currentScroll;
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const currentScroll = window.scrollY;
+        setScrolled(currentScroll > 10);
+        setHidden(currentScroll > lastScroll && currentScroll > 100);
+        lastScroll = currentScroll;
+      });
     };
+
     window.addEventListener('scroll', handler, { passive: true });
-    return () => window.removeEventListener('scroll', handler);
+    return () => {
+      window.removeEventListener('scroll', handler);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   useEffect(() => {
@@ -92,8 +96,9 @@ export default function Header() {
     setSigningOut(true);
     try {
       await signOut();
+      // No router.refresh() — middleware redirect handles session state,
+      // and a redundant refresh causes an extra full server re-render.
       router.push('/login');
-      router.refresh();
     } finally {
       setSigningOut(false);
     }

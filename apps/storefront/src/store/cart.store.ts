@@ -80,6 +80,11 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'furlivo-cart',
+      // skipHydration lets the server render without reading localStorage,
+      // preventing hydration mismatches. Each client component calls
+      // useCartStore.persist.rehydrate() once on mount instead of hiding
+      // the whole page behind a `mounted` guard.
+      skipHydration: true,
       partialize: (state) => ({ items: state.items }), // only persist items, not UI state
     }
   )

@@ -34,13 +34,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const supabase = createClient();
 
-    // Prime initial state
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user ?? null);
-      setLoading(false);
-    });
-
-    // Stay in sync with Supabase events (sign-in, sign-out, token refresh)
+    // onAuthStateChange fires INITIAL_SESSION immediately on mount —
+    // no need for a separate getUser() call (which would make 2 round-trips).
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);

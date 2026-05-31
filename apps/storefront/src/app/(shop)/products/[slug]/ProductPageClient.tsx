@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -41,18 +41,26 @@ export default function ProductPageClient() {
   const [addedToCart, setAddedToCart]       = useState(false);
   const [isBuyingNow, setIsBuyingNow]       = useState(false);
 
+  // Ref for the "Added!" reset timer — cleared on unmount to prevent setState
+  // being called on an unmounted component (memory leak).
+  const addedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const router = useRouter();
   const addItem = useCartStore(s => s.addItem);
   const unitPrice = 2399;
 
-  const handleVariantChange = (v: typeof variants[0]) => {
-    setActiveVariant(v.id);
-    if (v.imgIndex !== undefined) {
-      setActiveImg(v.imgIndex);
-    }
-  };
+  // Clear any pending timer when the component unmounts (fixes Leak 1)
+  useEffect(() => () => {
+    if (addedTimerRef.current) clearTimeout(addedTimerRef.current);
+  }, []);
 
-  const addToCart = () => {
+  const handleVariantChange = useCallback((v: typeof variants[0]) => {
+    setActiveVariant(v.id);
+    if (v.imgIndex !== undefined) setActiveImg(v.imgIndex);
+  }, []);
+
+  // useCallback prevents recreation on every render (Perf 2)
+  const addToCart = useCallback(() => {
     addItem({
       productId: 'steam-grooming-brush',
       variantId: activeVariant,
@@ -61,21 +69,23 @@ export default function ProductPageClient() {
       price: unitPrice,
       quantity: qty,
       imageUrl: images[activeImg]!.src,
-      slug: 'steam-grooming-brush'
+      slug: 'steam-grooming-brush',
     });
-  };
+  }, [addItem, activeVariant, qty, activeImg]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = useCallback(() => {
     addToCart();
     setAddedToCart(true);
-    setTimeout(() => setAddedToCart(false), 2500);
-  };
+    // Clear any existing timer before setting a new one (prevents stacking)
+    if (addedTimerRef.current) clearTimeout(addedTimerRef.current);
+    addedTimerRef.current = setTimeout(() => setAddedToCart(false), 2500);
+  }, [addToCart]);
 
-  const handleBuyNow = () => {
+  const handleBuyNow = useCallback(() => {
     setIsBuyingNow(true);
     addToCart();
     router.push('/checkout');
-  };
+  }, [addToCart, router]);
 
   const total = unitPrice * qty;
   const fmt = (n: number) => `₹${n.toLocaleString('en-IN')}`;

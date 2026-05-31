@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useTransition } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -13,14 +13,25 @@ import styles from './CartPage.module.css';
 export default function CartPage() {
   const router = useRouter();
   const cartStore = useCartStore();
-  const [mounted, setMounted] = useState(false);
-  const [isNavigating, setIsNavigating] = useState(false);
+  // useTransition ties the loading state to the actual navigation lifecycle —
+  // isPending auto-resolves when navigation completes (unlike a manual boolean).
+  const [isPending, startTransition] = useTransition();
 
+  // Rehydrate cart from localStorage once on mount.
   useEffect(() => {
-    setMounted(true);
+    useCartStore.persist.rehydrate();
   }, []);
 
-  if (!mounted) return <CartSkeleton />;
+  // Show skeleton only during the brief hydration window.
+  if (!useCartStore.persist.hasHydrated()) return <CartSkeleton />;
+
+  // Perf 3: compute subtotal once per render via useMemo rather than
+  // letting the Zustand getter call get().items.reduce() on every access.
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const subtotal = useMemo(
+    () => cartStore.items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    [cartStore.items]
+  );
 
   const fmt = (n: number) => `₹${n.toLocaleString('en-IN')}`;
 
@@ -89,7 +100,7 @@ export default function CartPage() {
           <h2 className={styles.summaryTitle}>Order Summary</h2>
           <div className={styles.summaryRow}>
             <span>Subtotal</span>
-            <span>{fmt(cartStore.subtotal)}</span>
+            <span>{fmt(subtotal)}</span>
           </div>
           <div className={styles.summaryRow}>
             <span>Shipping</span>
@@ -97,17 +108,20 @@ export default function CartPage() {
           </div>
           <div className={styles.summaryTotal}>
             <span>Total</span>
-            <span>{fmt(cartStore.subtotal)}</span>
+            <span>{fmt(subtotal)}</span>
           </div>
           <button
             className={`btn btn-primary btn-xl ${styles.checkoutBtn}`}
-            disabled={isNavigating}
+            disabled={isPending}
             onClick={() => {
-              setIsNavigating(true);
-              router.push('/checkout');
+              // startTransition ties isPending to the navigation lifecycle —
+              // it auto-clears when the destination page finishes rendering.
+              startTransition(() => {
+                router.push('/checkout');
+              });
             }}
           >
-            {isNavigating
+            {isPending
               ? <><Spinner size="sm" color="white" /> Loading checkout…</>
               : 'Proceed to Checkout'
             }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/home/HeroSection';
@@ -19,13 +20,22 @@ export default function HomePage() {
     <>
       <Header />
       <main>
+        {/* Above-the-fold: render immediately — no Suspense */}
         <HeroSection />
         <TrustBar />
-        <BenefitsSection />
-        <HowItWorks />
-        <ReviewsSection />
-        <FAQSection />
-        <NewsletterSection />
+
+        {/*
+          Below-the-fold sections are wrapped in Suspense so Next.js can
+          stream the above-fold HTML to the browser instantly while the rest
+          renders server-side. null fallback = no visible shift.
+        */}
+        <Suspense fallback={null}>
+          <BenefitsSection />
+          <HowItWorks />
+          <ReviewsSection />
+          <FAQSection />
+          <NewsletterSection />
+        </Suspense>
       </main>
       <Footer />
     </>

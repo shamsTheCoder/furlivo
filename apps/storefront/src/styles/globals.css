@@ -400,3 +400,25 @@ h3 { font-size: clamp(1.3rem, 2.5vw, 1.75rem); }
 @media (min-width: 769px) {
   .show-mobile { display: none !important; }
 }
+
+/* ─── GPU Compositing hints ──────────────────────────────────────────────── */
+/* Applied to elements with continuous transform animations to promote them
+   to their own compositor layers, reducing main-thread paint load. */
+.marquee-gpu {
+  will-change: transform;
+  transform: translateZ(0); /* force layer creation */
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────────────────── */
+/* Disable all decorative animations for users who prefer it, and as a
+   lightweight perf win on lower-end / battery-saving devices.             */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -116,16 +116,17 @@ export default function HowItWorks() {
 
               {/* Image */}
               <div className={styles.imageWrap}>
-                {steps.map((step, idx) => (
-                  <Image
-                    key={step.num}
-                    src={step.img}
-                    alt={step.title}
-                    fill
-                    className={`${styles.img} ${idx === active ? styles.imgActive : styles.imgHidden}`}
-                    sizes="(max-width: 900px) 100vw, 50vw"
-                  />
-                ))}
+                {/* Single image keyed on `active` \u2014 React remounts when step changes.
+                  Replaces the 3-images-always-in-DOM pattern that held 3 decoded
+                  bitmaps in GPU VRAM simultaneously regardless of which was visible. */}
+              <Image
+                key={active}
+                src={steps[active]!.img}
+                alt={steps[active]!.title}
+                fill
+                className={styles.imgActive}
+                sizes="(max-width: 900px) 100vw, 50vw"
+              />
                 <div className={styles.imgOverlay} />
               </div>
 

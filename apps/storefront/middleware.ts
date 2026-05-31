@@ -55,7 +55,8 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
+  // Only intercept routes that actually need session handling.
+  // Shop pages (/products, /cart, /checkout, /) are public — skip them entirely
+  // to avoid a Supabase getUser() round-trip on every client-side navigation.
+  matcher: ['/account/:path*', '/login', '/register', '/forgot-password'],
 };

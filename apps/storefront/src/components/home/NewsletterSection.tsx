@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MdOutlineMailOutline, MdArrowForward } from 'react-icons/md';
 import Spinner from '@/components/shared/Spinner';
 import styles from './NewsletterSection.module.css';
@@ -9,13 +9,17 @@ export default function NewsletterSection() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
+  // Store timer ref so it can be cleared if the component unmounts before it
+  // fires — prevents setState being called on an unmounted component (Leak 3).
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  useEffect(() => () => clearTimeout(timerRef.current), []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setStatus('loading');
-    
-    // Simulate API call
-    setTimeout(() => {
+    // Assign to ref so the cleanup effect can cancel it on unmount
+    timerRef.current = setTimeout(() => {
       setStatus('success');
       setEmail('');
     }, 1000);

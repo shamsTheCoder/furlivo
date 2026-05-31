@@ -202,6 +202,8 @@
   background: var(--success);
   flex-shrink: 0;
   animation: pulse-dot 1.5s ease-in-out infinite;
+  /* GPU layer — prevents the pulse from triggering main-thread paints (CSS 2) */
+  will-change: transform;
 }
 
 .urgency strong { color: var(--error); }

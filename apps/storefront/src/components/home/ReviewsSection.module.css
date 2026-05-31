@@ -180,6 +180,9 @@
   gap: 16px;
   width: max-content;
   animation: marqueeLeft 32s linear infinite;
+  /* Promote to its own GPU layer so the animation runs off the main thread */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .marqueeReverse {

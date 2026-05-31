@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Script from 'next/script';
+import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/store/cart.store';
 import CheckoutSkeleton from '@/components/shared/CheckoutSkeleton';
 import PaymentLoader from '@/components/shared/PaymentLoader';
@@ -12,40 +13,56 @@ import styles from './CheckoutPage.module.css';
 
 export default function CheckoutPageClient() {
   const cartStore = useCartStore();
-  const [mounted, setMounted] = useState(false);
+  const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Refs for cleanup (Leak 2 + Async 1)
+  const rzpRef   = useRef<any>(null);
+  const abortRef = useRef<AbortController | null>(null);
+
+  // Rehydrate cart from localStorage once on mount (skipHydration: true in store).
   useEffect(() => {
-    setMounted(true);
+    useCartStore.persist.rehydrate();
+
+    return () => {
+      // Leak 2: destroy the Razorpay iFrame + internal event listeners on unmount
+      rzpRef.current?.close?.();
+      // Async 1: cancel any in-flight fetch to /api/checkout/razorpay
+      abortRef.current?.abort();
+    };
   }, []);
 
-  if (!mounted) return <CheckoutSkeleton />;
+  if (!useCartStore.persist.hasHydrated()) return <CheckoutSkeleton />;
 
   const fmt = (n: number) => `₹${n.toLocaleString('en-IN')}`;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     if (paymentMethod === 'cod') {
       alert('Order Placed via COD Successfully! This is a demo.');
       cartStore.clearCart();
-      window.location.href = '/';
+      // Async 2: use router.push instead of window.location.href to avoid
+      // a full page reload that discards Next.js router cache.
+      router.push('/?order=success');
       return;
     }
 
     try {
+      // Async 1: attach an AbortController so the fetch is cancelled if the
+      // component unmounts or the user navigates away mid-request.
+      abortRef.current = new AbortController();
       const res = await fetch('/api/checkout/razorpay', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: cartStore.subtotal })
+        body: JSON.stringify({ amount: cartStore.subtotal }),
+        signal: abortRef.current.signal,
       });
       const order = await res.json();
 
-      if (order.error) {
-        throw new Error(order.error);
-      }
+      if (order.error) throw new Error(order.error);
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
@@ -57,25 +74,26 @@ export default function CheckoutPageClient() {
         handler: function (response: any) {
           alert('Payment Successful! Payment ID: ' + response.razorpay_payment_id);
           cartStore.clearCart();
-          window.location.href = '/';
+          // Async 2: soft navigation — no full page reload
+          router.push('/?order=success');
         },
         prefill: {
           name: 'Demo User',
           email: 'demo@example.com',
-          contact: '9999999999'
+          contact: '9999999999',
         },
-        theme: {
-          color: '#000000'
-        }
+        theme: { color: '#FF6B35' },
       };
 
-      const rzp1 = new (window as any).Razorpay(options);
-      rzp1.on('payment.failed', function (response: any) {
+      // Leak 2: store the Razorpay instance in a ref so it can be closed on unmount.
+      rzpRef.current = new (window as any).Razorpay(options);
+      rzpRef.current.on('payment.failed', function (response: any) {
         alert('Payment Failed: ' + response.error.description);
         setIsSubmitting(false);
       });
-      rzp1.open();
+      rzpRef.current.open();
     } catch (err: any) {
+      if (err.name === 'AbortError') return; // navigation away — silently ignore
       console.error(err);
       alert('Error initiating payment');
       setIsSubmitting(false);
@@ -90,7 +108,7 @@ export default function CheckoutPageClient() {
       <header className={styles.header}>
         <Link href="/" className={styles.logo}>Furlivo</Link>
       </header>
-      
+
       <div className={styles.layout}>
         {/* Forms */}
         <form onSubmit={handleSubmit}>
@@ -130,21 +148,21 @@ export default function CheckoutPageClient() {
 
           <div className={styles.section}>
             <h2 className={styles.title}>Payment Method</h2>
-            <div 
+            <div
               className={`${styles.paymentOption} ${paymentMethod === 'card' ? styles.paymentActive : ''}`}
               onClick={() => setPaymentMethod('card')}
             >
               <input type="radio" checked={paymentMethod === 'card'} readOnly />
               <label className={styles.label}>Credit / Debit Card</label>
             </div>
-            <div 
+            <div
               className={`${styles.paymentOption} ${paymentMethod === 'upi' ? styles.paymentActive : ''}`}
               onClick={() => setPaymentMethod('upi')}
             >
               <input type="radio" checked={paymentMethod === 'upi'} readOnly />
               <label className={styles.label}>UPI</label>
             </div>
-            <div 
+            <div
               className={`${styles.paymentOption} ${paymentMethod === 'cod' ? styles.paymentActive : ''}`}
               onClick={() => setPaymentMethod('cod')}
             >
@@ -153,12 +171,15 @@ export default function CheckoutPageClient() {
             </div>
           </div>
 
-          <button type="submit" className={`btn btn-primary btn-xl ${styles.submitBtn}`} disabled={isSubmitting || cartStore.items.length === 0}>
-            {isSubmitting ? (
-              <><Spinner size="sm" color="white" /> Processing…</>
-            ) : (
-              `Pay ${fmt(cartStore.subtotal)}`
-            )}
+          <button
+            type="submit"
+            className={`btn btn-primary btn-xl ${styles.submitBtn}`}
+            disabled={isSubmitting || cartStore.items.length === 0}
+          >
+            {isSubmitting
+              ? <><Spinner size="sm" color="white" /> Processing…</>
+              : `Pay ${fmt(cartStore.subtotal)}`
+            }
           </button>
         </form>
 
@@ -174,9 +195,7 @@ export default function CheckoutPageClient() {
                 <div className={styles.summaryItemName}>{item.name}</div>
                 {item.variantName && <div className={styles.summaryItemVar}>{item.variantName}</div>}
               </div>
-              <div className={styles.summaryItemPrice}>
-                {fmt(item.price)}
-              </div>
+              <div className={styles.summaryItemPrice}>{fmt(item.price)}</div>
             </div>
           ))}
 

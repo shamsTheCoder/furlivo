@@ -100,6 +100,8 @@
   padding: 10px 16px;
   text-align: center;
   animation: floatBadge 4s ease-in-out infinite;
+  /* GPU layer — keeps the float animation off the main thread (CSS 1) */
+  will-change: transform;
 }
 
 /* Position each badge */
