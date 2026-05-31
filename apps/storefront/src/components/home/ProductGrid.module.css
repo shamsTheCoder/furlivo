@@ -148,7 +148,7 @@
   text-decoration: line-through;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .quickAdd { opacity: 1; transform: translateY(0); position: static; margin-top: 16px; }
 }

@@ -396,11 +396,11 @@
   100% { box-shadow: 0 0 0 0 rgba(255,107,53,0); }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .menuToggle { display: none; }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1023px) {
   .nav { display: none; }
   .shopCta { display: none; }
 }

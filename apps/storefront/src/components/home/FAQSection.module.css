@@ -167,7 +167,7 @@
 }
 
 /* ── Responsive ───────────────────────────────────────────── */
-@media (max-width: 960px) {
+@media (max-width: 768px) {
   .layout { grid-template-columns: 1fr; gap: 48px; }
   .sidebar { position: static; }
   .section { padding-block: 72px; }

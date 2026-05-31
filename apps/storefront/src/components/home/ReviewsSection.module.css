@@ -310,7 +310,7 @@
 }
 
 /* ── Responsive ───────────────────────────────────────────── */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .featured { grid-template-columns: 1fr; }
   .featuredImage { aspect-ratio: 16/9; }
   .featuredQuote { padding: 28px 28px; }
