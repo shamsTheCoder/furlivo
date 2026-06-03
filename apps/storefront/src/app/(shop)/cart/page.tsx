@@ -6,6 +6,7 @@ import CartPageClient from './CartPageClient';
 export const metadata: Metadata = {
   title: 'Your Cart — Furlivo',
   description: 'Review your items and proceed to secure checkout.',
+  robots: { index: false, follow: false },
 };
 
 export default function CartPage() {

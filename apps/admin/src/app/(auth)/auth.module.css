@@ -1,0 +1,131 @@
+/* ── Auth pages — Login, Register, Forgot Password ────────────────────────── */
+
+.page {
+  min-height: 100vh;
+  background: var(--bg-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  padding: 48px 40px;
+  box-shadow: var(--shadow-lg);
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 32px;
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.logo a { color: var(--text-primary); text-decoration: none; }
+.logo a:hover { color: var(--orange); }
+
+.title {
+  font-family: var(--font-sans);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* input-group and input-label are defined globally — no need to redefine */
+
+.error {
+  font-size: 0.875rem;
+  color: var(--error);
+  background: var(--error-pale);
+  border: 1px solid rgba(220,38,38,0.2);
+  border-radius: var(--r-md);
+  padding: 12px 16px;
+}
+
+.forgotWrap { text-align: right; }
+
+.forgot {
+  font-size: 0.875rem;
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.forgot:hover { text-decoration: underline; }
+
+.switchLink {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-top: 24px;
+}
+
+.link { color: var(--orange); font-weight: 600; }
+.link:hover { text-decoration: underline; }
+
+/* ── Divider ── */
+.divider {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.875rem;
+  margin-block: 20px;
+  position: relative;
+}
+
+.divider span {
+  position: relative;
+  z-index: 1;
+  background: var(--white);
+  padding: 0 12px;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── OAuth button ── */
+.oauthBtn {
+  gap: 10px;
+  border-color: var(--border-strong) !important;
+}
+
+.oauthBtn:hover {
+  background: var(--bg-subtle) !important;
+  border-color: var(--text-primary) !important;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 32px 24px;
+    border-radius: var(--r-xl);
+  }
+}

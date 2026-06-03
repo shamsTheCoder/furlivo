@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { HiOutlineShoppingBag } from 'react-icons/hi2';
 
 export const metadata: Metadata = { title: 'Products' };
 
@@ -16,7 +17,7 @@ export default function ProductsPage() {
         textAlign: 'center',
         color: '#4a4a5a',
       }}>
-        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🛍️</div>
+        <div style={{ marginBottom: '1rem' }}><HiOutlineShoppingBag size={48} /></div>
         <p style={{ fontSize: '1rem', fontWeight: 500, color: '#6a6a7a', marginBottom: '1.5rem' }}>
           Connect your Supabase database to manage products
         </p>

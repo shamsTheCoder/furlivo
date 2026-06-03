@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = { title: 'Customers' };
 
 const mockCustomers = [
-  { name: 'Sarah Mitchell', email: 'sarah@example.com', orders: 3, spent: 8397, joined: '2026-03-12', pets: '🐕 Golden' },
-  { name: 'James Torres', email: 'james@example.com', orders: 1, spent: 2799, joined: '2026-04-20', pets: '🐈 Maine Coon' },
-  { name: 'Lisa Kim', email: 'lisa@example.com', orders: 5, spent: 14995, joined: '2026-02-08', pets: '🐕 Husky' },
-  { name: 'Marco Rossi', email: 'marco@example.com', orders: 2, spent: 6998, joined: '2026-05-01', pets: '🐕🐈 Multi' },
+  { name: 'Sarah Mitchell', email: 'sarah@example.com', orders: 3, spent: 8397, joined: '2026-03-12', pets: 'Golden Retriever' },
+  { name: 'James Torres', email: 'james@example.com', orders: 1, spent: 2799, joined: '2026-04-20', pets: 'Maine Coon' },
+  { name: 'Lisa Kim', email: 'lisa@example.com', orders: 5, spent: 14995, joined: '2026-02-08', pets: 'Husky' },
+  { name: 'Marco Rossi', email: 'marco@example.com', orders: 2, spent: 6998, joined: '2026-05-01', pets: 'Multiple' },
 ];
 
 export default function CustomersPage() {

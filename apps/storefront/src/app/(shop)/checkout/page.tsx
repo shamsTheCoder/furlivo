@@ -4,6 +4,7 @@ import CheckoutPageClient from './CheckoutPageClient';
 export const metadata: Metadata = {
   title: 'Secure Checkout — Furlivo',
   description: 'Complete your Furlivo purchase securely.',
+  robots: { index: false, follow: false },
 };
 
 export default function CheckoutPage() {

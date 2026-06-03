@@ -1,4 +1,4 @@
-.page { padding: 2rem; }
+.page { padding: 2.5rem 2rem; }
 
 .header {
   display: flex;
@@ -10,50 +10,54 @@
 }
 
 .title {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: #f0ebe3;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
   margin: 0 0 0.25rem;
+  letter-spacing: -0.03em;
 }
 
-.subtitle { color: #6a6a7a; font-size: 0.875rem; }
+.subtitle { color: var(--text-muted); font-size: 0.9375rem; }
 
 .date {
   font-size: 0.875rem;
-  color: #6a6a7a;
-  background: #1e1e2e;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-card);
   padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #2a2a3e;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .statCard {
-  background: #1a1a2e;
-  border: 1px solid #2a2a3e;
-  border-radius: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
   padding: 1.5rem;
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  transition: border-color 200ms, box-shadow 200ms;
+  transition: transform var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
 }
 
 .statCard:hover {
-  border-color: #3a3a5e;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-lg);
 }
 
 .statIcon {
   width: 48px;
   height: 48px;
-  border-radius: 12px;
+  border-radius: var(--r-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,21 +67,28 @@
 
 .statValue {
   font-size: 1.75rem;
-  font-weight: 700;
-  color: #f0ebe3;
+  font-weight: 800;
+  color: var(--text-primary);
   line-height: 1;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.03em;
 }
 
 .statLabel {
-  font-size: 0.8rem;
-  color: #8a8a9a;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
   margin-bottom: 0.5rem;
 }
 
 .statChange {
   font-size: 0.75rem;
-  color: #4CAF82;
+  font-weight: 700;
+  color: var(--success);
+  background: var(--success-pale);
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+  display: inline-block;
 }
 
 .chartsRow {
@@ -87,28 +98,36 @@
 }
 
 .chartCard {
-  background: #1a1a2e;
-  border: 1px solid #2a2a3e;
-  border-radius: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
   padding: 1.5rem;
+  transition: box-shadow var(--t-base) var(--ease);
+}
+
+.chartCard:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .chartTitle {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #c8c0b4;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
   margin: 0 0 1.5rem;
+  letter-spacing: -0.02em;
 }
 
 .chartPlaceholder {
-  height: 200px;
+  height: 240px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #4a4a5a;
-  font-size: 0.875rem;
-  border: 1px dashed #2a2a3e;
-  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border: 2px dashed var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-subtle);
 }
 
 @media (max-width: 1024px) { .statsGrid { grid-template-columns: repeat(2, 1fr); } }

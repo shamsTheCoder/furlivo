@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import styles from './orders.module.css';
+import { HiOutlineArrowDownTray, HiOutlineEye, HiOutlinePencilSquare } from 'react-icons/hi2';
 
 export const metadata: Metadata = { title: 'Orders' };
 
@@ -29,7 +30,7 @@ export default function OrdersPage() {
           <h1 className={styles.title}>Orders</h1>
           <p className={styles.subtitle}>{mockOrders.length} total orders</p>
         </div>
-        <button className={styles.exportBtn}>⬇ Export CSV</button>
+        <button className={styles.exportBtn}><HiOutlineArrowDownTray size={16} /> Export CSV</button>
       </div>
 
       {/* Filters */}
@@ -80,8 +81,8 @@ export default function OrdersPage() {
                 <td className={styles.date}>{o.date}</td>
                 <td>
                   <div className={styles.actions}>
-                    <button className={styles.actionBtn} title="View order">👁️</button>
-                    <button className={styles.actionBtn} title="Edit order">✏️</button>
+                    <button className={styles.actionBtn} title="View order"><HiOutlineEye size={18} /></button>
+                    <button className={styles.actionBtn} title="Edit order"><HiOutlinePencilSquare size={18} /></button>
                   </div>
                 </td>
               </tr>

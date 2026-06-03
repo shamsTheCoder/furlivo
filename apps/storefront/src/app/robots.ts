@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/account/', '/checkout/', '/api/'],
+      disallow: ['/account/', '/checkout/', '/api/', '/login/', '/register/', '/forgot-password/'],
     },
     sitemap: 'https://furlivo.shop/sitemap.xml',
   };

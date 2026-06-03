@@ -1,13 +1,18 @@
 import type { Metadata } from 'next';
 import styles from './dashboard.module.css';
 
+import { 
+  HiOutlineCurrencyRupee, HiOutlineCube, 
+  HiOutlineUsers, HiOutlineChartBar, HiOutlineArrowTrendingUp
+} from 'react-icons/hi2';
+
 export const metadata: Metadata = { title: 'Dashboard' };
 
 const stats = [
-  { label: 'Revenue Today', value: '$0', change: '+0%', icon: '💰', color: '#E8935A' },
-  { label: 'Orders Today', value: '0', change: '+0%', icon: '📦', color: '#5B9EA0' },
-  { label: 'Active Customers', value: '0', change: '+0%', icon: '👥', color: '#7A9E7E' },
-  { label: 'Avg Order Value', value: '$0', change: '+0%', icon: '📊', color: '#C9A84C' },
+  { label: 'Revenue Today', value: '₹0', change: '+0%', icon: <HiOutlineCurrencyRupee size={24} />, color: '#E8935A' },
+  { label: 'Orders Today', value: '0', change: '+0%', icon: <HiOutlineCube size={24} />, color: '#5B9EA0' },
+  { label: 'Active Customers', value: '0', change: '+0%', icon: <HiOutlineUsers size={24} />, color: '#7A9E7E' },
+  { label: 'Avg Order Value', value: '₹0', change: '+0%', icon: <HiOutlineChartBar size={24} />, color: '#C9A84C' },
 ];
 
 export default function DashboardPage() {
@@ -44,13 +49,13 @@ export default function DashboardPage() {
         <div className={styles.chartCard}>
           <h2 className={styles.chartTitle}>Revenue (Last 30 Days)</h2>
           <div className={styles.chartPlaceholder}>
-            <span>📈 Connect Supabase to see live data</span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><HiOutlineArrowTrendingUp size={20} /> Connect Supabase to see live data</span>
           </div>
         </div>
         <div className={styles.chartCard}>
           <h2 className={styles.chartTitle}>Recent Orders</h2>
           <div className={styles.chartPlaceholder}>
-            <span>📦 No orders yet</span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><HiOutlineCube size={20} /> No orders yet</span>
           </div>
         </div>
       </div>

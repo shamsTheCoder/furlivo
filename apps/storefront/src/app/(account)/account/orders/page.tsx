@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import styles from './orders.module.css';
 
-export const metadata: Metadata = { title: 'My Orders — Furlivo' };
+export const metadata: Metadata = { title: 'My Orders — Furlivo', robots: { index: false, follow: false } };
 
 const DEMO_ORDERS = [
   {

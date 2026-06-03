@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToastStore } from '@/store/toast.store';
+import { useCartStore } from '@/store/cart.store';
+import Spinner from '@/components/shared/Spinner';
 import {
   HiStar, HiTruck, HiShieldCheck, HiArrowPath,
   HiBolt, HiChevronRight, HiMinus, HiPlus,

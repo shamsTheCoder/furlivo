@@ -15,8 +15,40 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Furlivo',
+    url: 'https://furlivo.shop',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://furlivo.shop/products?q={search_term_string}',
+      'query-input': 'required name=search_term_string',
+    },
+  };
+
+  const orgJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Furlivo',
+    url: 'https://furlivo.shop',
+    logo: 'https://furlivo.shop/images/og-image.jpg',
+    sameAs: [
+      'https://instagram.com/furlivo',
+      'https://facebook.com/furlivo',
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+      />
       <Header />
       <main>
         {/* Above-the-fold: Promotional Hero Banner and Category Discovery */}

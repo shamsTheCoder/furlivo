@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import styles from './wishlist.module.css';
 
-export const metadata: Metadata = { title: 'My Wishlist — Furlivo' };
+export const metadata: Metadata = { title: 'My Wishlist — Furlivo', robots: { index: false, follow: false } };
 
 const DEMO_WISHLIST = [
   {

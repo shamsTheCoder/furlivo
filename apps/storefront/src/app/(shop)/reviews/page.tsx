@@ -95,8 +95,39 @@ const ratingDist = [
 ];
 
 export default function ReviewsPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Furlivo Steam Pet Grooming Brush',
+    image: 'https://furlivo.shop/images/product-hero.png',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '2847',
+    },
+    review: reviews.map(r => ({
+      '@type': 'Review',
+      author: {
+        '@type': 'Person',
+        name: r.name,
+      },
+      datePublished: new Date(r.date).toISOString().split('T')[0],
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: r.rating,
+        bestRating: '5',
+      },
+      name: r.title,
+      reviewBody: r.body,
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
       <main>
         {/* Hero */}

@@ -9,7 +9,7 @@ import styles from './account.module.css';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = { title: 'My Account' };
+export const metadata: Metadata = { title: 'My Account', robots: { index: false, follow: false } };
 
 export default async function AccountPage() {
   const supabase = await createClient();
