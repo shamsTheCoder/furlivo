@@ -62,7 +62,9 @@ export default function ProductPageClient() {
   // Intersection Observer for Smart Sticky Bar
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => setIsActionsVisible(entry.isIntersecting),
+      ([entry]) => {
+        if (entry) setIsActionsVisible(entry.isIntersecting);
+      },
       { threshold: 0, rootMargin: '0px 0px -100px 0px' }
     );
     if (actionsRef.current) observer.observe(actionsRef.current);
